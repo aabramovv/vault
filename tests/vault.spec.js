@@ -13,6 +13,15 @@ test.beforeAll(async () => {
 
 let tempVaultPath = null;
 
+test.beforeEach(async ({ page }) => {
+  // This simulates a browser environment that does not support the File System Access API.
+  await page.addInitScript(() => {
+    delete window.showSaveFilePicker;
+    delete window.showOpenFilePicker;
+  });
+});
+
+
 test.afterEach(async () => {
   if (tempVaultPath) {
     await fs.unlink(tempVaultPath).catch(() => {}); 
